@@ -1,4 +1,9 @@
 import express, { Request, Response } from "express";
+import {
+  IRequestWithBody,
+  IRequestWithParams,
+  IRequestWithQuery,
+} from "./interfaces/IRequest";
 import { IUser } from "./interfaces/IUser";
 const PORT = 5000;
 const app = express();
@@ -10,7 +15,7 @@ const users: Array<IUser> = [
   { id: 4, name: "Danil", email: "danil@gmail.com" },
 ];
 
-app.get("/users", (req: Request, res: Response) => {
+app.get("/users", (req: IRequestWithQuery, res: Response<Array<IUser>>) => {
   if (!req.query.title) {
     res.json(users);
   } else {
@@ -21,7 +26,7 @@ app.get("/users", (req: Request, res: Response) => {
   }
 });
 
-app.get("/users/:id", (req: Request, res: Response) => {
+app.get("/users/:id", (req: IRequestWithParams, res: Response) => {
   const id: number = +req.params.id;
   const user = users.find((user) => user.id === id);
   if (user) {
@@ -31,7 +36,7 @@ app.get("/users/:id", (req: Request, res: Response) => {
   }
 });
 
-app.post("/users", (req: Request, res: Response) => {
+app.post("/users", (req: IRequestWithBody, res: Response) => {
   const new_user = {
     id: +Date.now(),
     name: req.body.name,
